@@ -80,7 +80,8 @@
     let peak = 1;
     for (let i = v.from; i <= v.t; i++) peak = Math.max(peak, v.loads[i]);
     const ls = phone ? U.scale(0, peak, 5) : U.scale(0, Math.max(span(v.loads, Math.max), 1), 2);
-    const Q = Plot.make(document.getElementById('fitl'), 100, phone ? { l: 34, r: 8, t: 6, b: 22 } : { l: M.l, r: M.r, t: 6, b: 22 });
+    const nDays = qTo - v.from + 1, dayRow = phone && nDays <= 100;     // the phone's row of day numbers (28 and 90 days)
+    const Q = Plot.make(document.getElementById('fitl'), dayRow ? 112 : 100, phone ? { l: 34, r: 8, t: 6, b: dayRow ? 34 : 22 } : { l: M.l, r: M.r, t: 6, b: 22 });
     Plot.yAxis(Q, ls, 'l');
     const bw = Math.max(1, Q.pw / (qTo - v.from + 1) * 0.7);
     for (let i = v.from; i <= v.t; i++) {
@@ -88,7 +89,23 @@
       if (b) Plot.rect(Q, x, Q.y(0, ls), bw, Q.y(b, ls) - Q.y(0, ls), C.bike);
       if (g) Plot.rect(Q, x, Q.y(b, ls), bw, Q.y(b + g, ls) - Q.y(b, ls), C.gym);
     }
-    Plot.xLabels(Q, phone ? U.dateTicks(day(v.from), day(qTo), 11).map(d => [XQ(Q, U.dayIndex(L.first, d[0])), d[1]]) : ticks(Q));
+    if (!phone) Plot.xLabels(Q, ticks(Q));
+    else {
+      const months = U.dateTicks(day(v.from), day(qTo), 11).map(d => [XQ(Q, U.dayIndex(L.first, d[0])), d[1]]);
+      if (!dayRow) Plot.xLabels(Q, months);
+      else {
+        // the day of the month: every other day back from today over 28 days, each Monday over 90 (Andy, 18 November 2026)
+        const g = Q.g, y = Q.h - Q.b + 12;
+        g.fillStyle = C.mute; g.textAlign = 'center';
+        for (let i = qTo; i >= v.from; i--) {
+          const d = day(i);
+          if (nDays <= 35 ? (qTo - i) % 2 === 0 : new Date(d + 'T00:00:00').getDay() === 1) g.fillText(String(+d.slice(8, 10)), XQ(Q, i), y);
+        }
+        g.textAlign = 'left';
+        g.fillText(U.MONTHS[+day(v.from).slice(5, 7) - 1].slice(0, 3), Q.l, y + 13);
+        months.forEach(m => { if (m[0] > Q.l + 30) g.fillText(m[1].replace(/ \d{4}$/, ''), m[0], y + 13); });
+      }
+    }
     const at = (Pl, end) => x => {
       end = end == null ? v.to : end;
       const i = Math.max(v.from, Math.min(end, Math.round(v.from + (x - Pl.l) / Pl.pw * (end - v.from))));
