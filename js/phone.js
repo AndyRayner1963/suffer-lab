@@ -39,6 +39,9 @@
     });
     xLabels0(P, kept);
   };
+  // The Fitness page's daily load chart half as tall again as on the Mac (Andy, 18 November 2026).
+  const make0 = root.Plot.make;
+  root.Plot.make = (host, height, m) => make0(host, host && host.id === 'fitl' ? Math.round(height * 1.5) : height, m);
   // No selection on the ride chart: its figures come from the Mac's server.
   const draw0 = root.Chart.draw;
   root.Chart.draw = (box, ride, o) => draw0(box, ride, Object.assign({}, o, { sel: null, onSelect: () => {} }));
@@ -57,9 +60,10 @@
 
   function route() {
     const h = location.hash;
-    if (/^#\/settings/.test(h)) { tabs('settings'); App.redraw = null; settingsPage(); root.scrollTo(0, 0); return; }
+    if (/^#\/settings/.test(h)) { main.dataset.view = 'settings'; tabs('settings'); App.redraw = null; settingsPage(); root.scrollTo(0, 0); return; }
     if (!App.ready) return;
     const now = U.parseHash(h) || { view: 'summary' };
+    main.dataset.view = now.view;                       // phone.css lays some pages out by it
     if (now.view === 'year') { now.view = 'month'; now.m = now.y === +App.today.slice(0, 4) ? +App.today.slice(5, 7) - 1 : 0; }
     tabs(now.view);
     App.redraw = null;
@@ -98,7 +102,7 @@
     main.innerHTML = '<div class="bar"><h2 class="free">Settings</h2></div>' +
       '<div class="card"><h3>GitHub Token</h3>' + (s.token ?
         '<p>Token saved, ending <b class="mono">' + U.esc(s.token.slice(-4)) + '</b>.</p><div class="btnrow"><button class="btn" id="rep">Replace token</button><button class="btn" id="rem">Remove token</button></div>' :
-        '<p>Paste the read-only token for <b>' + U.esc(s.repo) + '</b>.</p>') +
+        '<p>Paste the read-only token for <b>' + U.esc(s.repo) + '</b>.</p><p class="note">Safari and the Home Screen icon keep separate storage: paste the token in the one you use, the icon.</p>') +
       '<div id="tokin"' + (s.token ? ' hidden' : '') + '><input class="field mono" id="tok" type="password" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…">' +
       '<div class="btnrow"><button class="btn on" id="savet">Save token</button></div></div>' +
       '<p class="note">The token stays on this phone and is sent only to api.github.com.</p></div>' +
@@ -139,13 +143,20 @@
   let timer = null;
   root.addEventListener('resize', () => { clearTimeout(timer); timer = setTimeout(() => { if (App.redraw) App.redraw(); }, 150); });
 
+  // Back on screen after a while (the phone keeps the page open in the background): read the data again,
+  // staying on the page shown, so a ride captured meanwhile appears and the Offline note is current.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && App.ready && Date.now() - (App.opened || 0) > 120000) start(false);
+  });
+
   async function start(goSummary) {
     const t0 = performance.now();
     GH.stats.requests = 0; GH.stats.phone = 0; GH.stats.kb = 0; GH.root = null;
+    const wasReady = App.ready;
     App.ready = false;
     const s = await GH.settings();
     if (!s.token) { location.hash = '#/settings'; route(); return; }
-    main.innerHTML = '<p class="note">Loading…</p>';
+    if (!wasReady) main.innerHTML = '<p class="note">Loading…</p>';
     try {
       await GH.open();
       const maybe = p => get('data/' + p).catch(e => { if (e.kind === 'notfound') return null; throw e; });
@@ -164,7 +175,11 @@
       const d = new Date();
       App.today = U.iso(d.getFullYear(), d.getMonth(), d.getDate());
       const last = App.rides[App.rides.length - 1];
-      document.getElementById('asof').textContent = (GH.offline ? 'Offline · ' : '') + (last ? 'latest ride ' + U.dayMonth(last.date) : '');
+      document.getElementById('asof').textContent = last ? 'latest ride ' + U.dayMonth(last.date) : '';
+      const off = document.getElementById('off');
+      off.hidden = !GH.offline;
+      off.textContent = 'No connection: showing the copy on this phone.';
+      App.opened = Date.now();
       App.ready = true;
       if (goSummary === true || /^#\/settings/.test(location.hash)) location.hash = '#/summary';
       route();

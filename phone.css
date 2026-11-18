@@ -26,7 +26,7 @@ main { padding: 10px 10px 24px; max-width: none; }
 .card { padding: 10px 10px; }
 
 /* tiles two to a row; peak powers four to a row */
-.tiles, .tiles.six { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.tiles, .tiles.six, .tiles.four { grid-template-columns: repeat(2, 1fr); gap: 6px; }
 .tile b { font-size: 18px; }
 .pkc { display: block; }
 .pkc h3 { margin-bottom: 6px; }
@@ -90,3 +90,20 @@ table.wtot tr.g td:first-child { color: var(--mute); }
 .mono { font-family: ui-monospace, Menlo, monospace; }
 .btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
 .card p { margin: 4px 0; }
+
+/* Round 1 (Andy, 18 November 2026) */
+#off { background: var(--bad-f); color: var(--warn); font-weight: 600; font-size: 13px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.tile.mv .mvs { gap: 8px; }
+.tile.mv b { font-size: 15.5px; }
+/* Fitness: the title, then the six boxes, then the buttons that choose what the chart shows, then the charts */
+main[data-view=fitness] { display: flex; flex-wrap: wrap; align-items: center; column-gap: 6px; row-gap: 6px; }
+main[data-view=fitness] > .bar { display: contents; }
+main[data-view=fitness] > .bar > h2 { order: 0; width: 100%; margin: 0; }
+main[data-view=fitness] > .bar + .card { order: 1; width: 100%; margin-bottom: 2px; }
+main[data-view=fitness] > .bar > .lbl, main[data-view=fitness] > .bar > .btn { order: 2; }
+main[data-view=fitness] > .bar > .lbl.gap { margin-left: 0; }
+main[data-view=fitness] > .card ~ .card, main[data-view=fitness] > .note, main[data-view=fitness] > .cols { order: 3; width: 100%; }
+main[data-view=fitness] > .bar + .card ~ .card { margin-top: 4px; }
+/* Fitness: no "Dashed: projected" line in the chart's legend */
+#fitc + .legend > span:last-child { display: none; }
+
