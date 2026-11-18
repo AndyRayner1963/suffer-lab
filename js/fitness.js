@@ -74,24 +74,30 @@
     Plot.vline(P, X(P, v.t), C.mute, [2, 3], 'today');
     Plot.xLabels(P, ticks(P));
     // daily load, on the same time scale
-    const peak = Math.max(span(v.loads, Math.max), 1), ls = U.scale(0, peak, 2);
-    const Q = Plot.make(document.getElementById('fitl'), 100, { l: M.l, r: M.r, t: 6, b: 22 });
+    // On the phone (Andy, 18 November 2026): the bars run to today across the whole width, on a scale
+    // whose top sits just above the highest bar.  On the Mac they keep the chart's time scale above.
+    const phone = !!App.phone, qTo = phone ? v.t : v.to, XQ = (Pl, i) => Pl.x(i, v.from, qTo);
+    let peak = 1;
+    for (let i = v.from; i <= v.t; i++) peak = Math.max(peak, v.loads[i]);
+    const ls = phone ? U.scale(0, peak, 5) : U.scale(0, Math.max(span(v.loads, Math.max), 1), 2);
+    const Q = Plot.make(document.getElementById('fitl'), 100, phone ? { l: 34, r: 8, t: 6, b: 22 } : { l: M.l, r: M.r, t: 6, b: 22 });
     Plot.yAxis(Q, ls, 'l');
-    const bw = Math.max(1, Q.pw / (v.to - v.from + 1) * 0.7);
+    const bw = Math.max(1, Q.pw / (qTo - v.from + 1) * 0.7);
     for (let i = v.from; i <= v.t; i++) {
-      const b = sel !== 'gym' ? L.bike_load[i] : 0, g = sel !== 'bike' ? L.gym_load[i] : 0, x = X(Q, i) - bw / 2;
+      const b = sel !== 'gym' ? L.bike_load[i] : 0, g = sel !== 'bike' ? L.gym_load[i] : 0, x = XQ(Q, i) - bw / 2;
       if (b) Plot.rect(Q, x, Q.y(0, ls), bw, Q.y(b, ls) - Q.y(0, ls), C.bike);
       if (g) Plot.rect(Q, x, Q.y(b, ls), bw, Q.y(b + g, ls) - Q.y(b, ls), C.gym);
     }
-    Plot.xLabels(Q, ticks(Q));
-    const at = Pl => x => {
-      const i = Math.max(v.from, Math.min(v.to, Math.round(v.from + (x - Pl.l) / Pl.pw * (v.to - v.from))));
+    Plot.xLabels(Q, phone ? U.dateTicks(day(v.from), day(qTo), 11).map(d => [XQ(Q, U.dayIndex(L.first, d[0])), d[1]]) : ticks(Q));
+    const at = (Pl, end) => x => {
+      end = end == null ? v.to : end;
+      const i = Math.max(v.from, Math.min(end, Math.round(v.from + (x - Pl.l) / Pl.pw * (end - v.from))));
       const d = day(i), wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date(d + 'T00:00:00').getDay()];
       return '<b>' + wd + ' ' + U.dayMonth(d, true) + '</b>' + (i > v.t ? ' <span>projected</span>' : '') +
         '<span style="color:' + C.ctl + '">Fitness ' + U.num(v.S.ctl[i], 1) + '</span><span style="color:' + C.atl + '">Fatigue ' + U.num(v.S.atl[i], 1) +
         '</span><span style="color:' + C.form + '">Form ' + signed(v.S.tsb[i]) + '</span>' + (i > v.t ? '' : '<span>Load ' + U.num(v.loads[i], 1) + '</span>');
     };
-    Plot.hover(P, at(P)); Plot.hover(Q, at(Q));
+    Plot.hover(P, at(P)); Plot.hover(Q, at(Q, qTo));
     // drag across the chart and release: those days become the period shown (Andy, 18 November 2026)
     if (onRange) {
       const idx = x => Math.max(v.from, Math.min(v.to, Math.round(v.from + (x - P.l) / P.pw * (v.to - v.from))));
