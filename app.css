@@ -197,9 +197,8 @@ table.rec td.nw { white-space: nowrap; }
 .card h3 .h3n { text-transform: none; letter-spacing: 0; font-weight: 400; margin-left: 10px; }
 /* Summary boxes with several figures (Andy, 18 November 2026): bike purple, gym teal, a total in the darker purple */
 .tiles.four { grid-template-columns: repeat(4, 1fr); }
-.tile.mv .mvs { display: flex; gap: 14px; align-items: flex-end; margin-top: 2px; }
-.tile.mv .mvs > div { display: flex; flex-direction: column; }
-.tile.mv .mvs .mvr { margin-left: auto; text-align: right; }
+.tile.mv .mvs { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 8px; margin-top: 2px; }
+.tile.mv .mvs > div { display: flex; flex-direction: column; align-items: flex-end; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tile.mv em { font-size: 10.5px; }
 @media (max-width: 1000px) { .tiles.four { grid-template-columns: repeat(2, 1fr); } }
 

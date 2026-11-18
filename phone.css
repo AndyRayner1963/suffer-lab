@@ -93,8 +93,10 @@ table.wtot tr.g td:first-child { color: var(--mute); }
 
 /* Round 1 (Andy, 18 November 2026) */
 #off { background: var(--bad-f); color: var(--warn); font-weight: 600; font-size: 13px; padding: 8px 14px; border-bottom: 1px solid var(--line); }
-.tile.mv .mvs { gap: 8px; }
-.tile.mv b { font-size: 15.5px; }
+.tile.mv { padding: 6px 7px 5px; }
+.tile.mv .mvs { column-gap: 4px; }
+.tile.mv b { font-size: 14.5px; }
+.tile.mv b small { font-size: 11px; font-weight: 600; color: inherit; }
 /* Fitness: the title, then the six boxes, then the buttons that choose what the chart shows, then the charts */
 main[data-view=fitness] { display: flex; flex-wrap: wrap; align-items: center; column-gap: 6px; row-gap: 6px; }
 main[data-view=fitness] > .bar { display: contents; }

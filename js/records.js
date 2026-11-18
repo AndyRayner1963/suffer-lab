@@ -27,7 +27,8 @@
   }
 
   function tests(App) {
-    const T = App.tests, rows = T.tests.slice().reverse();
+    // rejected proposals are left out (Andy, 18 November 2026): the list holds the confirmed tests and any new proposal
+    const T = App.tests, rows = T.tests.filter(t => t.status !== 'rejected').reverse();
     const fig = t => t.kind === 'ramp' ? 'Best minute ' + U.num(t.best_minute_w) + ' W' : 'Best 20 min ' + U.num(t.best_20min_w) + ' W';
     const res = t => {
       if (t.kind === 'ramp') return t.vo2max ? 'VO2max ' + U.num(t.vo2max.storer, 1) + ' (Storer) · ' + U.num(t.vo2max.hawley_noakes, 1) + ' (Hawley & Noakes)' :
