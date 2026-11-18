@@ -5,7 +5,7 @@
   'use strict';
   const U = root.U, Plot = root.Plot, Hist = root.Hist, C = Plot.COL;
   const SEL = [['all', 'Combined'], ['gym', 'Gym'], ['bike', 'Bike']];
-  const PERIODS = [[90, '90 days'], [182, '6 months'], [365, '1 year'], [0, 'All']];
+  const PERIODS = [[28, '28 days'], [90, '90 days'], [182, '6 months'], [365, '1 year'], [0, 'All']];
   const AHEAD = 28;                    // days of projection drawn after today
   const M = { l: 46, r: 46, t: 10, b: 22 };
   const signed = (v, d) => (v == null ? '' : (v > 0 ? '+' : v < 0 ? '−' : '') + U.num(Math.abs(v), d == null ? 1 : d));

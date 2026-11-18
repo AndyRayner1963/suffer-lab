@@ -123,3 +123,10 @@ main[data-view=fitness] > .bar + .card ~ .card { margin-top: 4px; }
 .week .dhd h4, .week .dhd .note { margin: 0 0 3px; }
 .week .day:first-child { margin-top: 0; }
 
+
+/* Round 7: Fitness: the Show buttons on one row, the Period buttons (with 28 days) on the row beneath */
+main[data-view=fitness] > .bar::after { content: ''; order: 3; width: 100%; height: 0; }
+main[data-view=fitness] > .bar > .lbl:has(+ [data-fper]), main[data-view=fitness] > .bar > [data-fper] { order: 4; }
+main[data-view=fitness] > .bar > [data-fper] { padding: 4px 7px; font-size: 12px; }
+main[data-view=fitness] { column-gap: 5px; }
+main[data-view=fitness] > .card ~ .card, main[data-view=fitness] > .note, main[data-view=fitness] > .cols { order: 5; }
