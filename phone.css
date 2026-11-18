@@ -109,3 +109,11 @@ main[data-view=fitness] > .bar + .card ~ .card { margin-top: 4px; }
 /* Fitness: no "Dashed: projected" line in the chart's legend */
 #fitc + .legend > span:last-child { display: none; }
 
+/* Calendar (round 4): upright, the activities only; on its side, the week's totals at the right.
+   Fitness, fatigue and form stay at the top of each week either way. */
+.wbody .wtot { display: none; }
+@media (orientation: landscape) {
+  .wbody { display: grid; grid-template-columns: 1fr auto; column-gap: 14px; align-items: start; }
+  .wbody .wtot { display: table; width: auto; margin: 8px 0 0; }
+}
+

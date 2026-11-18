@@ -79,7 +79,8 @@
           both.map(x => x[1]).join('') + '</div>';
       });
       h += '<div class="card week" data-week="' + week[0].key + '"><div class="whd"><h3>Week of ' + U.dayMonth(week[0].key) + '</h3>' + weekEnd(App, week[6].key) + '</div>' +
-        totals(wk[week[0].key]) + (body || '<p class="note">No activity.</p>') + '</div>';
+        // the activities, and the week's totals beside them (shown when the phone is turned on its side)
+        '<div class="wbody"><div class="wdays">' + (body || '<p class="note">No activity.</p>') + '</div>' + totals(wk[week[0].key]) + '</div></div>';
     });
     if (!weeks.length) h += '<p class="note">Nothing yet this month.</p>';
     return h;
