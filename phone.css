@@ -1,0 +1,92 @@
+/* The phone on top of the Mac dashboard's own app.css: one column for an iPhone held upright.
+   Colours, fonts and the look of tiles, cards and buttons come from app.css unchanged. */
+html { -webkit-text-size-adjust: 100%; }
+body { font-size: 14px; padding-bottom: calc(58px + env(safe-area-inset-bottom)); overscroll-behavior-y: none; }
+header { position: sticky; top: 0; z-index: 5; gap: 10px; padding: calc(8px + env(safe-area-inset-top)) 14px 8px; }
+header h1 { font-size: 18px; margin: 0; }
+header .asof { font-size: 11.5px; }
+header .gear { color: #fff; text-decoration: none; font-size: 20px; line-height: 1; padding: 0 2px; }
+main { padding: 10px 10px 24px; max-width: none; }
+#upd { display: block; width: 100%; border: 0; background: var(--cream); color: var(--acc); font-weight: 600; padding: 10px; }
+
+/* the bar of pages along the bottom */
+#tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: grid; grid-template-columns: repeat(6, 1fr);
+  background: var(--card); border-top: 1px solid var(--edge); padding: 0 2px env(safe-area-inset-bottom); }
+#tabs button { background: none; border: 0; padding: 11px 0 12px; font-size: 11.5px; font-weight: 600; color: var(--mute); }
+#tabs button.on { color: var(--acc); box-shadow: inset 0 3px 0 var(--acc); }
+
+/* page bars: wrap rather than run off the screen */
+.bar { flex-wrap: wrap; gap: 6px; }
+.bar h2 { font-size: 18px; min-width: 0; margin-right: 4px; }
+.bar .tot { margin-left: 0; width: 100%; font-size: 12px; }
+.bar .btn, .bar.pw .btn { padding: 4px 11px; font-size: 13px; }
+.bar .lbl.gap, .bar.pw .lbl.gap { margin-left: 4px; }
+.ctl { flex-wrap: wrap; row-gap: 6px; }
+.ctl .lbl.gap { margin-left: 6px; }
+.card { padding: 10px 10px; }
+
+/* tiles two to a row; peak powers four to a row */
+.tiles, .tiles.six { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.tile b { font-size: 18px; }
+.pkc { display: block; }
+.pkc h3 { margin-bottom: 6px; }
+.pk { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.pk .tile { display: block; padding: 4px 7px; }
+.pk .tile b { font-size: 16px; }
+.cols, .cols.two, .cols.two.gymrec { grid-template-columns: 1fr; }
+.cols .wide { grid-column: auto; }
+.z { grid-template-columns: 112px 1fr 58px 30px; gap: 6px; font-size: 11.5px; }
+.z .zt { padding-left: 4px; }
+td:first-child { width: auto; }
+.card table.rec, .card table.parts { font-size: 12.5px; }
+.card:has(table.rec) { overflow-x: auto; }
+table.rec td { padding: 4px 6px; white-space: nowrap; }
+.legend { gap: 8px; font-size: 11.5px; }
+#ch { cursor: default; }
+.tip { font-size: 11.5px; }
+
+/* left out on the phone: histograms, and the controls that need the Mac's server or a mouse */
+#rh, .histn, .card:has(input[data-hist]) { display: none !important; }
+#ffrom, #fto, #fgo, .lbl:has(+ #ffrom), .lbl:has(+ #fto), .h3n { display: none !important; }
+#pfrom, #pto, #pgo, .lbl:has(+ #pfrom), .lbl:has(+ #pto) { display: none !important; }
+#selb { display: none; }
+
+/* the calendar list */
+.mnav { justify-content: space-between; flex-wrap: nowrap; }
+.mnav h2.mid { flex: 1; text-align: center; margin: 0; }
+.mtot { margin: 0 0 8px; font-size: 12.5px; color: var(--mute); text-align: center; }
+.mtot b { color: var(--acc); }
+.mtot .g, .mtot .g b { color: #0b6e75; }
+.week h3 { margin: 0; color: var(--acc); }
+.whd { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; margin-bottom: 6px; }
+.wfit { display: flex; gap: 8px; font-size: 11.5px; white-space: nowrap; }
+.wfit .ctl { color: #4B2C6B; } .wfit .atl { color: #C2409A; } .wfit .tsb { color: #E07B1A; }
+.wfit.proj { font-style: italic; opacity: .55; }
+table.wtot { font-size: 12.5px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+table.wtot th { font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--mute); font-weight: 600; text-align: right; padding: 2px 6px; }
+table.wtot td { text-align: right; padding: 2px 6px; border-bottom: 0; color: var(--acc); font-weight: 600; }
+table.wtot td:first-child { text-align: left; color: var(--mute); font-weight: 500; }
+table.wtot tr.g td { color: #0b6e75; }
+table.wtot tr.g td:first-child { color: var(--mute); }
+.day { margin-top: 8px; }
+.day h4 { margin: 0 0 3px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); font-weight: 600; }
+.day.today h4 { color: var(--acc); }
+.act { display: grid; grid-template-columns: 38px 40px 62px 1fr 74px 54px; align-items: baseline; column-gap: 4px; padding: 7px 8px; margin-top: 4px;
+  border-radius: 6px; border-left: 4px solid var(--acc); background: var(--sub); color: inherit; text-decoration: none; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.act > span { text-align: right; white-space: nowrap; }
+.act .t { text-align: left; color: var(--mute); font-size: 11px; }
+.act b { font-size: 13.5px; }
+.act.hrl { border-left-color: var(--hr); background: var(--bad-f); }
+.act.none { border-left-color: #8a918d; background: var(--hdr); }
+.act .tags { grid-column: 2 / -1; text-align: left; margin-top: 2px; }
+.act .tags .tag:first-child { margin-left: 0; }
+.act.gym { grid-template-columns: 38px 40px 62px 1fr; border-left-color: #0b6e75; background: #EAF3F3; }
+.act.gym .parts { text-align: right; color: var(--mute); font-size: 11.5px; overflow: hidden; text-overflow: ellipsis; }
+.day.out { opacity: .65; }
+
+/* Settings */
+.field { display: block; width: 100%; font: inherit; font-size: 16px; padding: 8px 10px; border: 1px solid var(--edge); border-radius: 6px; margin: 4px 0 8px; }
+.lab { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); font-weight: 600; }
+.mono { font-family: ui-monospace, Menlo, monospace; }
+.btnrow { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
+.card p { margin: 4px 0; }
