@@ -117,3 +117,9 @@ main[data-view=fitness] > .bar + .card ~ .card { margin-top: 4px; }
   .wbody .wtot { display: table; width: auto; margin: 8px 0 0; }
 }
 
+/* Round 5: bigger month arrows; the week's fitness, fatigue and form on the line of its first day */
+.mnav .btn { font-size: 16px; padding: 5px 14px; }
+.week .dhd { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.week .dhd h4, .week .dhd .note { margin: 0 0 3px; }
+.week .day:first-child { margin-top: 0; }
+

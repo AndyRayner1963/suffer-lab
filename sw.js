@@ -1,7 +1,7 @@
 // Service worker: keeps every file of the page as one versioned set, so the page opens with no
 // connection.  A new version installs in the background; the page offers it with a bar at the top.
 // Requests to api.github.com are never touched here: the data has its own store (js/gh.js).
-const VERSION = "1.0.4";
+const VERSION = "1.0.5";
 const CACHE = 'sufferlab-app-' + VERSION;
 const FILES = ["./", "app.css", "icons/icon-180.png", "icons/icon-192.png", "icons/icon-512.png", "index.html", "js/chart.js", "js/fitness.js", "js/gh.js", "js/gym.js", "js/hist.js", "js/list.js", "js/phone.js", "js/plot.js", "js/power.js", "js/records.js", "js/ride.js", "js/summary.js", "js/util.js", "js/weeks.js", "manifest.webmanifest", "phone.css", "version.js"];
 

@@ -70,17 +70,20 @@
     const weeks = U.monthGrid(y, m).filter(w => w[0].key <= App.today).reverse();
     weeks.forEach(week => {
       const days = week.slice().reverse().filter(d => d.key <= App.today);
+      // the week's fitness, fatigue and form sit on the line of its first (newest) day with activity
+      const fit = weekEnd(App, week[6].key);
       let body = '';
       days.forEach(d => {
         const rs = App.byDate[d.key] || [], gs = App.gymByDate[d.key] || [];
         if (!rs.length && !gs.length) return;
         const both = rs.map(r => [r.start_local, rideRow(App, r)]).concat(gs.map(g => [g.start_local, gymRow(g)])).sort((a, b) => (a[0] < b[0] ? -1 : 1));
-        body += '<div class="day' + (d.key === App.today ? ' today' : '') + (d.inMonth ? '' : ' out') + '"><h4>' + dayName(d.key) + (d.key === App.today ? ' · today' : '') + '</h4>' +
+        const head = '<h4>' + dayName(d.key) + (d.key === App.today ? ' · today' : '') + '</h4>';
+        body += '<div class="day' + (d.key === App.today ? ' today' : '') + (d.inMonth ? '' : ' out') + '">' + (body ? head : '<div class="dhd">' + head + fit + '</div>') +
           both.map(x => x[1]).join('') + '</div>';
       });
-      h += '<div class="card week" data-week="' + week[0].key + '"><div class="whd"><h3>Week of ' + U.dayMonth(week[0].key) + '</h3>' + weekEnd(App, week[6].key) + '</div>' +
+      h += '<div class="card week" data-week="' + week[0].key + '">' +
         // the activities, and the week's totals beside them (shown when the phone is turned on its side)
-        '<div class="wbody"><div class="wdays">' + (body || '<p class="note">No activity.</p>') + '</div>' + totals(wk[week[0].key]) + '</div></div>';
+        '<div class="wbody"><div class="wdays">' + (body || '<div class="dhd"><p class="note">No activity.</p>' + fit + '</div>') + '</div>' + totals(wk[week[0].key]) + '</div></div>';
     });
     if (!weeks.length) h += '<p class="note">Nothing yet this month.</p>';
     return h;
