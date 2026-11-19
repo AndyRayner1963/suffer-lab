@@ -31,7 +31,7 @@
       '<span class="parts">' + parts + '</span></a>';
   }
 
-  // Fitness, fatigue and form at the end of the week's Sunday, as the Mac's week column shows them.
+  // Fitness, fatigue and form at the end of the week's last day, as the Mac's week column shows them.
   function weekEnd(App, sunday) {
     const L = App.load;
     if (!L) return '';

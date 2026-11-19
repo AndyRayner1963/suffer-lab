@@ -94,12 +94,12 @@
       const months = U.dateTicks(day(v.from), day(qTo), 11).map(d => [XQ(Q, U.dayIndex(L.first, d[0])), d[1]]);
       if (!dayRow) Plot.xLabels(Q, months);
       else {
-        // the day of the month: every other day back from today over 28 days, each Monday over 90 (Andy, 18 November 2026)
+        // the day of the month: every other day back from today over 28 days, each week's first day over 90 (Andy, 18 November 2026)
         const g = Q.g, y = Q.h - Q.b + 12;
         g.fillStyle = C.mute; g.textAlign = 'center';
         for (let i = qTo; i >= v.from; i--) {
           const d = day(i);
-          if (nDays <= 35 ? (qTo - i) % 2 === 0 : new Date(d + 'T00:00:00').getDay() === 1) g.fillText(String(+d.slice(8, 10)), XQ(Q, i), y);
+          if (nDays <= 35 ? (qTo - i) % 2 === 0 : new Date(d + 'T00:00:00').getDay() === U.weekStartIndex()) g.fillText(String(+d.slice(8, 10)), XQ(Q, i), y);
         }
         g.textAlign = 'left';
         g.fillText(U.MONTHS[+day(v.from).slice(5, 7) - 1].slice(0, 3), Q.l, y + 13);
@@ -161,7 +161,7 @@
       (App.hist ? '<div class="cols">' + HKINDS.map(kind => Hist.card(kind, 'fith-' + kind, sizes[kind])).join('') + '</div>' : '') +
       '<div class="card"><h3>Daily Load</h3><div id="fitl"></div><div class="legend">' +
       (st.sel !== 'gym' ? '<span><i style="background:' + C.bike + '"></i>Bike</span>' : '') + (st.sel !== 'bike' ? '<span><i style="background:' + C.gym + '"></i>Gym</span>' : '') +
-      '<span class="push">Last activity ' + U.dayMonth(L.last_activity, true) + '.  A gym session scores 0.75 × minutes × (10 − mean RIR) ÷ 10 × group factor.</span></div></div>' +
+      '<span class="push">Last activity ' + U.dayMonth(L.last_activity, true) + '.  A gym session scores ' + U.num(((App.settings || {}).gym || {}).constant, 2) + ' × minutes × (10 − mean RIR) ÷ 10 × group factor.</span></div></div>' +
       (App.hist ? '<p class="note histn">The histograms cover rides only, over the days shown above up to today' +
       (App.hist.zones_now ? '; power and heart rate coloured by the zones of the FTP (' + App.hist.zones_now.ftp + ' W) and threshold heart rate (' + App.hist.zones_now.threshold_hr + ' bpm) now in force' : '') +
       '.  Heart rate leaves out rides without a sound recording; cadence counts pedalling seconds.  The top 0.2% of the time is gathered into the last bar.</p>' : '');

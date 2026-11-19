@@ -27,7 +27,7 @@
       ' and a group factor of ' + U.num(g.group_factor, 1) + (g.recorded_minutes ? '; the recording ran ' + U.num(g.recorded_minutes) + ' minutes and counts as ' + U.num(g.minutes) : '') + '.</div>';
     h += '<div class="card" id="tc"><div class="tiles">' +
       tile('Duration', 'minutes', U.hm(g.minutes * 60), '', U.num(g.minutes, 1) + ' minutes') +
-      tile('Load', 'load', U.num(g.load, 1), '', '0.75 × min × (10 − RIR) ÷ 10 × factor') +
+      tile('Load', 'load', U.num(g.load, 1), '', U.num((App.settings.gym || {}).constant, 2) + ' × min × (10 − RIR) ÷ 10 × factor') +
       tile('Mean RIR', 'mean_rir', U.num(g.mean_rir, 2), '', g.rir_assumed ? 'assumed' : 'over ' + g.rir_sets + ' of ' + g.sets + ' sets') +
       tile('Group factor', 'group_factor', U.num(g.group_factor, 2), '', swole ? 'mean over the sets' : 'no set data') +
       tile('Sets', 'sets', g.sets == null ? '' : U.num(g.sets), '', '') +

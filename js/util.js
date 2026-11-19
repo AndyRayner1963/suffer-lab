@@ -48,9 +48,18 @@
     return v.length ? v[Math.min(v.length - 1, Math.floor(share * v.length))] : null;
   }
 
-  // The weeks (Monday to Sunday) that cover a month.  m is 0 to 11.
+  // The day weeks start on, as JavaScript counts (Sunday 0): Monday unless settings.json says otherwise
+  // (load.week_start; Saturday from 19 November 2026, to match Andy's weekly health check-in).
+  const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  let WS = 1;
+  function setWeekStart(name) { const i = WEEKDAYS.indexOf(String(name || 'monday').toLowerCase()); WS = i < 0 ? 1 : i; }
+  const weekStartIndex = () => WS;
+  // The seven short day names in week order.
+  const dayNames = () => [0, 1, 2, 3, 4, 5, 6].map(k => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][(WS + k) % 7]);
+
+  // The weeks (from the start day, seven days each) that cover a month.  m is 0 to 11.
   function monthGrid(y, m) {
-    const off = (new Date(y, m, 1).getDay() + 6) % 7, dim = new Date(y, m + 1, 0).getDate(), weeks = [];
+    const off = (new Date(y, m, 1).getDay() - WS + 7) % 7, dim = new Date(y, m + 1, 0).getDate(), weeks = [];
     for (let w = 0; w * 7 - off < dim; w++) {
       const days = [];
       for (let i = 0; i < 7; i++) {
@@ -224,13 +233,13 @@
     if (s < 3600) return Math.floor(s / 60) + ' min' + (s % 60 ? ' ' + (s % 60) + ' s' : '');
     return Math.floor(s / 3600) + ' h' + (s % 3600 ? ' ' + Math.round(s % 3600 / 60) + ' min' : '');
   }
-  // Monday of the week holding an ISO date.
+  // The first day of the week holding an ISO date (a Monday unless the week starts on another day).
   function monday(day) {
-    const wd = (new Date(utc(day)).getUTCDay() + 6) % 7;
+    const wd = (new Date(utc(day)).getUTCDay() - WS + 7) % 7;
     return addDays(day, -wd);
   }
 
-  const U = { durLabel, monday, dayIndex, addDays, dayMonth, scale, pairedScales, dateTicks, MONTHS, pad, iso, hm, hms, num, dash, esc, DIST, dist, percentile, sum, totals, monthGrid, byDate, zoneRanges, share,
+  const U = { setWeekStart, weekStartIndex, dayNames, weekStart: monday, durLabel, monday, dayIndex, addDays, dayMonth, scale, pairedScales, dateTicks, MONTHS, pad, iso, hm, hms, num, dash, esc, DIST, dist, percentile, sum, totals, monthGrid, byDate, zoneRanges, share,
     smooth, recordTags, scopeLabel, parseHash, columns };
   if (typeof module !== 'undefined' && module.exports) module.exports = U;
   else root.U = U;

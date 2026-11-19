@@ -60,7 +60,7 @@
       now: { ftp: ftp && ftp.watts, ftp_from: ftp && ftp.from, ctl: L ? L.all.ctl[t] : null, tsb: L ? L.all.tsb[t] : null,
         best20: p90 && at20 >= 0 ? p90.w[at20] : null, best20_ride: p90 && at20 >= 0 ? p90.ride[at20] : null,
         vo2: App.tests && App.tests.latest_vo2max, rule: App.ftpRule && App.ftpRule.status },
-      week: Object.assign({ from: U.monday(today) }, fromPeriod(per('weeks', U.monday(today)))),
+      week: Object.assign({ from: U.weekStart(today) }, fromPeriod(per('weeks', U.weekStart(today)))),
       days28: L ? Object.assign({ from: U.addDays(today, -27), to: today }, fromDays(App, L, t - 27, t)) : null,
       year: fromPeriod(per('years', year)), last: fromPeriod(per('years', last)), yearKey: year, lastKey: last };
   }

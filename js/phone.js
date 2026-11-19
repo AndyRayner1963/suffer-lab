@@ -171,6 +171,7 @@
       App.warn = {};
       ((warnings && warnings.rides) || []).forEach(w => { App.warn[w.ride_id] = w; });
       App.records = records; App.settings = settings;
+      U.setWeekStart((settings.load || {}).week_start);
       App.years = Array.from(new Set(App.rides.map(r => +r.date.slice(0, 4)))).sort();
       const d = new Date();
       App.today = U.iso(d.getFullYear(), d.getMonth(), d.getDate());
